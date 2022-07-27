@@ -9,6 +9,7 @@ import appReducers from './reducers';
 window.strapi = {
   backendURL: process.env.STRAPI_ADMIN_BACKEND_URL,
   isEE: false,
+  isTelemetryDisabled: process.env.STRAPI_TELEMETRY_DISABLED === 'true',
   features: {
     SSO: 'sso',
   },

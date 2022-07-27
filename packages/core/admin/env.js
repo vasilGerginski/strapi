@@ -11,10 +11,11 @@ if (fs.existsSync(dotenvFilePath)) {
 }
 
 const STRAPI_ADMIN = /^STRAPI_ADMIN_/i;
+const STRAPI_TELEMETRY = /^STRAPI_TELEMETRY_/i;
 
 const getClientEnvironment = options => {
   const raw = Object.keys(process.env)
-    .filter(key => STRAPI_ADMIN.test(key))
+    .filter(key => STRAPI_ADMIN.test(key) || STRAPI_TELEMETRY.test(key))
     .reduce(
       (acc, current) => {
         acc[current] = process.env[current];
@@ -25,6 +26,7 @@ const getClientEnvironment = options => {
         ADMIN_PATH: options.adminPath,
         NODE_ENV: options.env || 'development',
         STRAPI_ADMIN_BACKEND_URL: options.backend,
+        STRAPI_TELEMETRY_DISABLED: false,
       }
     );
 

@@ -9,7 +9,7 @@ const useTracking = () => {
   const appInfo = useAppInfos();
 
   trackRef.current = (event, properties) => {
-    if (uuid) {
+    if (uuid && !window.strapi.isTelemetryDisabled) {
       try {
         axios.post('https://analytics.strapi.io/track', {
           event,
