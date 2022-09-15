@@ -43,14 +43,16 @@ module.exports = async function transfer(args) {
   let source;
   let destination;
 
-  if (config.source.type === 'strapi.file') {
+  const supportedSources = ['strapi.file'];
+  if (supportedSources.includes(config.source.type)) {
     const Source = require('./source/strapi.file');
     source = new Source(config);
     console.log('source created', !!source);
   }
 
-  if (config.destination.type === 'strapi.file') {
-    const Destination = require('./destination/strapi.database');
+  const supportedDestinations = ['strapi.database'];
+  if (supportedDestinations.includes(config.destination.type)) {
+    const Destination = require(`./destination/${config.destination.type}`);
     destination = new Destination(config);
     console.log('destination created', !!destination);
   }

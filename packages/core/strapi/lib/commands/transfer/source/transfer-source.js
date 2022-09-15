@@ -2,7 +2,7 @@
 
 class TransferSource {
   constructor(config) {
-    console.log('created TransferSource', config);
+    this.config = config; // TODO: clone?
   }
 }
 
