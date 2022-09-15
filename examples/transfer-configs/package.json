@@ -1,0 +1,38 @@
+{
+  "name": "transfer-configs",
+  "version": "4.3.8",
+  "description": "Example scripts for using the strapi transfer command",
+  "main": "index.js",
+  "scripts": {
+    "restore": "../../node_modules/.bin/strapi transfer -c restore.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/strapi/strapi.git"
+  },
+  "keywords": [
+    "strapi",
+    "transfer",
+    "backup",
+    "restore",
+    "import",
+    "export"
+  ],
+  "license": "SEE LICENSE IN LICENSE",
+  "author": {
+    "name": "Strapi Solutions SAS",
+    "email": "hi@strapi.io",
+    "url": "https://strapi.io"
+  },
+  "maintainers": [
+    {
+      "name": "Strapi Solutions SAS",
+      "email": "hi@strapi.io",
+      "url": "https://strapi.io"
+    }
+  ],
+  "engines": {
+    "node": ">=14.19.1 <=18.x.x",
+    "npm": ">=6.0.0"
+  }
+}

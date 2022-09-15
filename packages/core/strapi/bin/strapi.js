@@ -102,6 +102,14 @@ program
   .description('Create a new application')
   .action(require('../lib/commands/new'));
 
+// `$ strapi transfer`
+program
+  .command('transfer')
+  .description('Transfer data to or from Strapi')
+  // TODO: Final version should be possible to provide all options on the CLI instead of config file
+  .requiredOption('--config, -c <configFile>', 'Path to the transfer config file')
+  .action(require('../lib/commands/transfer'));
+
 // `$ strapi start`
 program
   .command('start')
