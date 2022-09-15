@@ -5,14 +5,13 @@ const path = require('path');
 const fs = require('fs');
 
 /**
- * Load the config file
+ * Load the transfer config file
  *
  * @param {string} filename
  *
  * @returns {object}
  *
  */
-
 function loadTransferConfig(filename, options) {
   const extension = path.extname(filename);
 
@@ -39,14 +38,15 @@ module.exports = async function transfer(args) {
   console.log('config', JSON.stringify(config, null, 2));
 
   // Excuse the ugliness here, just a PoC :)
-  // The real version should load these from something like @strapi/transfer which can be shared with strapi itself so they can be used without the CLI
+  // The real version should exist somewhere like @strapi/transfer to be usable in strapi instead of only the CLI
+
   let source;
   let destination;
-
   const supportedSources = ['strapi.file'];
   if (supportedSources.includes(config.source.type)) {
     const Source = require('./source/strapi.file');
     source = new Source(config);
+    source.runHook('after-create-source', { config });
     console.log('source created', !!source);
   }
 
@@ -56,6 +56,16 @@ module.exports = async function transfer(args) {
     destination = new Destination(config);
     console.log('destination created', !!destination);
   }
+
+  source.runHook('after-create-source', { config, destination });
+  source.runHook('after-create-destination', { config, destination });
+  destination.runHook('after-create-source', { config, source });
+  destination.runHook('after-create-destination', { config, source });
+
+  // should throw if there's a problem
+  destination.validateSourceSchema({ config, source });
+
+  // TODO: pipe data stream from source to destination
 
   process.exit(0);
 };
