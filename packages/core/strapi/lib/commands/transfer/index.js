@@ -64,13 +64,31 @@ module.exports = async function transfer(args) {
     destination.runHook('after-create-destination', { config, source }),
   ]);
 
+  // load schema from source
+  await source.runHook('before-load-schema', { config });
+  await destination.runHook('before-load-schema', { config });
   const schema = await source.loadSchema();
+  await source.runHook('after-load-schema', { config });
+  await destination.runHook('after-load-schema', { config });
 
-  // should throw if there's a problem
-  destination.validateSchema({ config, source, schema });
+  // validate schema
+  await source.runHook('before-validate-schema', { config, source, schema });
+  await destination.runHook('before-validate-schema', { config, source, schema });
+  await destination.validateSchema({ config, source, schema });
+  await source.runHook('after-validate-schema', { config, source, schema });
+  await destination.runHook('after-validate-schema', { config, source, schema });
 
-  // TODO: pipe data stream from source to destination
-  source.on('data');
+  // pipe data stream from source to destination
+  source.on('data', (params) => {
+    // TODO: pipe this through the hooks here?
+    destination.onData(params);
+  });
+
+  source.on('complete', (params) => {
+    destination.onComplete(params);
+  });
+
+  source.startDataTransfer();
 
   process.exit(0);
 };

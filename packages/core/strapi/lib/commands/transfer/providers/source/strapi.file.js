@@ -17,6 +17,11 @@ class StrapiFileSource extends TransferSource {
       test: 'foo',
     };
   }
+
+  startDataTransfer() {
+    // Load the file
+    // streaming it passing each chunk to runHook('data', data)
+  }
 }
 
 module.exports = StrapiFileSource;
