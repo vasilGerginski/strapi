@@ -8,7 +8,7 @@ class TransferDestination extends TransferProvider {
   }
 
   validateSchema() {
-    throw new Error('must override validateSchema');
+    // don't do anything for now
   }
 }
 
