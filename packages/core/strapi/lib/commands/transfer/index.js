@@ -79,13 +79,14 @@ module.exports = async function transfer(args) {
   await destination.runHook('after-validate-schema', { config, source, schema });
 
   // pipe data stream from source to destination
-  source.on('data', (params) => {
+  source.on('data', async (params) => {
     // TODO: pipe this through the hooks here?
-    destination.onData(params);
+    await destination.onData(params);
   });
 
-  source.on('complete', (params) => {
-    destination.onComplete(params);
+  source.on('complete', async (params) => {
+    await destination.onComplete(params);
+    process.exit(0);
   });
 
   source.startDataTransfer();
