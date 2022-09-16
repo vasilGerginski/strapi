@@ -6,7 +6,7 @@ module.exports = (args) => {
   return {
     source: {
       type: 'strapi.file',
-      'strapi.file.config': {
+      'strapi.file': {
         name: './data/backup-sample.json',
         zip: false,
         encrypt: false,
@@ -14,7 +14,7 @@ module.exports = (args) => {
     },
     destination: {
       type: 'strapi.database',
-      'strapi.database.config': {
+      'strapi.database': {
         connection: {
           client: 'sqlite',
           connection: {
