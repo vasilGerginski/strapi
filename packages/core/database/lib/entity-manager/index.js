@@ -1013,10 +1013,6 @@ const createEntityManager = (db) => {
       return { ...entity, ...entry };
     },
 
-    async LoadPage() {
-
-    },
-
     // TODO: add lifecycle events
     async load(uid, entity, fields, params) {
       const { attributes } = db.metadata.get(uid);
