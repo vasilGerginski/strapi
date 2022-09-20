@@ -44,6 +44,7 @@ class StrapiDatabaseDestination extends TransferDestination {
 
   async onData(data /* , params */) {
     console.log('strapidatabase received data', data);
+
     // TODO: insert data into database
   }
 }

@@ -7,9 +7,9 @@ module.exports = (args) => {
     destination: {
       type: 'strapi.file',
       'strapi.file.config': {
-        filename: 'backup-getstarted.json',
-        zip: false,
-        encrypt: false,
+        filename: '../data/backup-getstarted.json', // TODO: Should this be relative to config file or relative to CLI?
+        zip: false, // TODO: is the source file zipped?
+        encrypt: false, // TODO: is the source file encrypted? (need to add config for keyfile, password prompt, etc)
       },
     },
     source: {
@@ -18,7 +18,7 @@ module.exports = (args) => {
         connection: {
           client: 'sqlite',
           connection: {
-            filename: path.join('..', 'getstarted', '.tmp', 'data.db'),
+            filename: path.join('..', '..', 'getstarted', '.tmp', 'data.db'),
           },
           useNullAsDefault: true,
         },
