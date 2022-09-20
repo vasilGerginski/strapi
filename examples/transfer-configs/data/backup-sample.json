@@ -56,7 +56,7 @@
     { "__comment__": "if json stream doesn't support streaming this array we may have to restructure" },
     {
       "type":"content",
-      "content-type": "country",
+      "contentType": "country",
       "content": {
         "name": "Italy",
         "id": 1
@@ -64,7 +64,7 @@
     },
     {
       "type":"content",
-      "content-type": "country",
+      "contentType": "country",
       "content": {
         "name": "France",
         "id": 2
