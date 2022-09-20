@@ -24,16 +24,18 @@ class StrapiDatabaseDestination extends TransferDestination {
   /**
    * validate the schema
    *
+   * NOTE: ideally, a "restore" should be able to create the schema on the destination in this step,
+   * but for the current scope we will require it to already exist
+   *
    * TODO:
-   * - connect to database
-   * - pull schema
-   * - compare against params.schema
+   * - load destination schema from database // maybe we should do this ahead of time in initialization?
+   * - compare against source schema in params.schema
    *
    * @param {StrapiSchema} params.schema
    *
    */
-  validateSchema(params) {
-    super.validateSchema(params);
+  compareSourceSchema(params) {
+    super.compareSourceSchema(params);
 
     const { schema, config } = params;
 
