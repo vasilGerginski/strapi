@@ -1,8 +1,10 @@
 {
   "metadata": {
-    "source": "manual",
+    "__comment__": "This was actually a manually created file. And for now metadata isn't used anyway",
+    "provider": "strapi.file"
   },
   "schema": {
+    "__comment__": "This is the schema that will be compared with the destination",
     "contentTypes": [
       {
         "kind": "collectionType",
@@ -50,6 +52,23 @@
     ]
   },
   "data": [
-    
+    { "__comment__": "This is where the data will be stored. It will hold at least content and relations, and possibly additional metadata to support relations and id mapping" },
+    { "__comment__": "if json stream doesn't support streaming this array we may have to restructure" },
+    {
+      "type":"content",
+      "content-type": "country",
+      "content": {
+        "name": "Italy",
+        "id": 1
+      }
+    },
+    {
+      "type":"content",
+      "content-type": "country",
+      "content": {
+        "name": "France",
+        "id": 2
+      }
+    }
   ]
 }

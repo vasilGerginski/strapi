@@ -4,7 +4,7 @@
   "description": "Example scripts for using the strapi transfer command",
   "main": "index.js",
   "scripts": {
-    "restore": "../../node_modules/.bin/strapi transfer -c restore.js"
+    "restore": "strapi transfer -c restore.js"
   },
   "repository": {
     "type": "git",

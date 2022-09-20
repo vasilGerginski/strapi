@@ -10,10 +10,6 @@ class TransferSource extends TransferProvider {
   async getSchema() {
     throw new Error('must override getSchema');
   }
-
-  async getDataStream() {
-    throw new Error('must override getDataStream');
-  }
 }
 
 module.exports = TransferSource;

@@ -7,7 +7,7 @@ module.exports = (args) => {
     source: {
       type: 'strapi.file',
       'strapi.file': {
-        name: './data/backup-sample.json',
+        filename: './data/backup-sample.json',
         zip: false,
         encrypt: false,
       },
@@ -43,16 +43,19 @@ module.exports = (args) => {
           }) => {
             console.log('after-transfer');
           },
-          'before-preflight': ({ schema, transferConfig, transferStatus }) => {
+          'before-schema-validation': ({ schema, transferConfig, transferStatus }) => {
             console.log('after-transfer');
           },
-          'after-preflight': ({ schema, transferConfig, transferStatus }) => {
+          'after-schema-validation': ({ schema, transferConfig, transferStatus }) => {
             console.log('after-transfer');
           },
-          'before-transfer': ({ schema, transferConfig, transferStatus }) => {
-            console.log('after-transfer');
+          'before-transfer-start': ({ schema, transferConfig, transferStatus }) => {
+            console.log('before-transfer-start');
           },
-          'after-transfer': ({ schema, transferConfig, transferStatus }) => {
+          'before-data': ({ schema, transferConfig, transferStatus }) => {
+            console.log('before-data');
+          },
+          'transfer-complete': ({ schema, transferConfig, transferStatus }) => {
             console.log('after-transfer');
           },
 

@@ -10,6 +10,10 @@ class TransferDestination extends TransferProvider {
   async compareSourceSchema() {
     // don't do anything for now
   }
+
+  async onData(/* data, params */) {
+    console.warn('TransferDestination should be overridden');
+  }
 }
 
 module.exports = TransferDestination;

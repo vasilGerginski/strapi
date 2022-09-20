@@ -34,33 +34,31 @@ function loadTransferConfig(filename, options) {
 module.exports = async function transfer(args) {
   console.log(chalk.yellow('args'), args);
 
-  const config = await loadTransferConfig(args.C, args);
+  const config = await loadTransferConfig(args.C, args); // TODO: allow separate source/destination configs instead of only one file with both
   console.log('config', JSON.stringify(config, null, 2));
 
   // Excuse the ugliness here, just a PoC :)
-  // The real version should exist somewhere like @strapi/transfer to be usable in strapi instead of only the CLI
+  // In the real version, everything in the providers folder should be moved somewhere like @strapi/transfer to be usable in strapi instead of only the CLI
 
   let source;
   let destination;
-  const supportedSources = ['strapi.file'];
+  const supportedSources = ['strapi.file']; // TODO: this should come from something that reads from the providers folder
   if (supportedSources.includes(config.source.type)) {
-    const Source = require('./providers/source/strapi.file');
+    const Source = require(`./providers/source/${config.source.type}`);
     source = new Source(config);
-    source.runHook('after-create-source', { config });
-    console.log('source created', !!source);
   }
 
-  const supportedDestinations = ['strapi.database'];
+  const supportedDestinations = ['strapi.database']; // TODO: this should come from something that reads from the providers folder
   if (supportedDestinations.includes(config.destination.type)) {
     const Destination = require(`./providers/destination/${config.destination.type}`);
     destination = new Destination(config);
-    console.log('destination created', !!destination);
   }
 
   await Promise.all([
     // after-create-* hooks are where we can handle things like "open file handle", "open db connection", etc
     source.runHook('after-create-source', { config, destination }),
     destination.runHook('after-create-destination', { config, source }),
+
     // I can't think of a specific use-case for listening to the other side being created, but it doesn't hurt
     source.runHook('after-create-destination', { config, destination }),
     destination.runHook('after-create-source', { config, source }),
@@ -69,7 +67,7 @@ module.exports = async function transfer(args) {
   // load schema from source
   await source.runHook('before-load-schema', { config });
   await destination.runHook('before-load-schema', { config });
-  const schema = await source.loadSchema({ config, destination });
+  const schema = await source.getSchema({ config, destination });
 
   /**
    * TODO: real version shouldn't work like this.
@@ -83,20 +81,21 @@ module.exports = async function transfer(args) {
   // validate schema
   await source.runHook('before-validate-schema', { config, source, schema });
   await destination.runHook('before-validate-schema', { config, source, schema });
-  await destination.validateSchema({ config, source, schema });
+  await destination.compareSourceSchema({ config, source, schema });
   await source.runHook('after-validate-schema', { config, source, schema });
   await destination.runHook('after-validate-schema', { config, source, schema });
 
   /**
-   * TODO: real version might need a throttle on source to avoid filling up memory on CLI system
-   * we may also want to replace the onData hook method (which was simplest to implement in this poc) with a way for destination to pass a stream object to the source to use to pipe data through
+   * TODO: real version might need one or both:
+   * - a throttle on source to avoid filling up memory on CLI system
+   * - replace the onData hook method (which was simplest to implement in this poc) with a way for destination to pass a stream object to the source to use to pipe data through
    * should do some tests first to see if it's worth it, because that feels like it would be more complex and less flexible
    *
    * */
   // source sends data to destination via the data hook
-  source.on('data', async (params) => {
+  source.on('data', async (data) => {
     // TODO: pipe this through the hooks here?
-    await destination.onData(params);
+    await destination.onData(data);
   });
 
   // source notifies when it's finished sending data

@@ -7,7 +7,7 @@ class TransferProvider {
   // this.config = config object for this provider
 
   constructor(config, type, providerName) {
-    console.log('constructor', config, type, providerName);
+    // console.log('constructor', config, type, providerName);
     this.config = config[type][providerName]; // TODO: clone?
   }
 
@@ -21,7 +21,6 @@ class TransferProvider {
   }
 
   async runHook(hook, params) {
-    console.log('this.confing', this.config);
     // call internal hooks
     if (_.isArray(this.hooks) && _.isArray(this.hooks[hook])) {
       await Promise.all(this.hooks[hook].map(({ callback }) => callback(params)));

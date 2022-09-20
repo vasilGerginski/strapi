@@ -11,14 +11,14 @@ class StrapiDatabaseDestination extends TransferDestination {
 
   constructor(config) {
     super(config, providerName);
-    console.log('creating StrapiDatabaseDestination', this.config);
+    console.log('creating StrapiDatabaseDestination');
     this.on('after-create-destination', () => this.connectToDB({ config: this.config }));
   }
 
   async connectToDB({ config }) {
     console.log('creating connection for', config.connection);
     this.conn = await createConnection(config.connection);
-    console.log('created connection', this.conn);
+    console.log('created connection', !!this.conn);
   }
 
   /**
@@ -39,7 +39,12 @@ class StrapiDatabaseDestination extends TransferDestination {
 
     const { schema, config } = params;
 
-    console.log('validating schema', schema, config);
+    console.log('validating source schema', schema, config);
+  }
+
+  async onData(data) {
+    console.log('strapidatabase received data', data);
+    // TODO: insert data into database
   }
 }
 
