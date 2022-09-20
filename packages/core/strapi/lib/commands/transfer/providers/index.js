@@ -11,7 +11,7 @@ class TransferProvider {
     this.config = config[type][providerName]; // TODO: clone?
   }
 
-  // set a hook
+  // register an internal hook
   on(hook, callback) {
     if (!this.hooks) this.hooks = [];
     if (!this.hooks[hook]) {
@@ -26,7 +26,7 @@ class TransferProvider {
     if (_.isArray(this.hooks) && _.isArray(this.hooks[hook])) {
       await Promise.all(this.hooks[hook].map(({ callback }) => callback(params)));
     }
-    // call config hooks
+    // call user's config hooks
     if (_.isArray(this.config.hooks) && this.config.hooks[hook]) {
       let runHooks = this.config.hooks[hook];
       if (!_.isArray(runHooks)) {

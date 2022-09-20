@@ -29,7 +29,6 @@ class StrapiDatabaseDestination extends TransferDestination {
    * - pull schema
    * - compare against params.schema
    *
-   *
    * @param {StrapiSchema} params.schema
    *
    */

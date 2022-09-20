@@ -7,7 +7,7 @@ class TransferDestination extends TransferProvider {
     super(config, 'destination', providerName);
   }
 
-  validateSchema() {
+  async validateSchema() {
     // don't do anything for now
   }
 }
