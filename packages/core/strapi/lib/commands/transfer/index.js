@@ -17,7 +17,7 @@ function loadTransferConfig(filename, options) {
   if (extension === '.js') {
     const filepath = path.join(process.cwd(), filename);
     const config = require(filepath);
-    return config(options);
+    return config({ process: 'cli', options }); // assume someday Strapi may also run transfers directly rather than CLI. options could include an instance of strapi
   }
   if (extension === '.json') {
     return fs.readFileSync(filename);

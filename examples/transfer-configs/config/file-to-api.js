@@ -1,8 +1,6 @@
 const path = require('path');
 
 module.exports = (args) => {
-  console.log('Loading config');
-
   return {
     source: {
       // TODO: We don't need to state the type if we already have the key present below
