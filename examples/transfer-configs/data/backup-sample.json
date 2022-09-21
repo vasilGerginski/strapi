@@ -125,6 +125,23 @@
         "country": { "type":"relation", "contentType":"country", "id": 2},
         "id": 2
       }
+    },
+    {
+      "action":"api::page.page.create",
+      "attibutes": {
+        "title": "Page title",
+        "id": 2
+      }
+    },
+    {
+      "action":"api::page.page.createLocalization",
+      "attibutes": {
+        "locale": "fr-FR",
+        "attributes": {
+          "title": "Page title in french",
+          "id": 3
+        }
+      }
     }
   ]
 }
