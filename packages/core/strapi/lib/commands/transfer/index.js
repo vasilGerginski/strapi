@@ -41,49 +41,83 @@ module.exports = async function transfer(args) {
   // In the real version, everything in the providers folder should be moved somewhere like @strapi/transfer to be usable in strapi instead of only the CLI
 
   let source;
-  let destination;
-  const supportedSources = ['strapi.file']; // TODO: this should come from something that reads from the providers folder
+  const destinations = [];
+
+  const supportedSources = ['strapi.file']; // TODO: this should read from the providers folder
   if (supportedSources.includes(config.source.type)) {
+    console.log('loading source', config.source.type);
     const Source = require(`./providers/source/${config.source.type}`);
     source = new Source(config);
+  } else {
+    console.error('source type missing', config.source.type);
+    process.exit(1);
   }
 
-  const supportedDestinations = ['strapi.database']; // TODO: this should come from something that reads from the providers folder
-  if (supportedDestinations.includes(config.destination.type)) {
-    const Destination = require(`./providers/destination/${config.destination.type}`);
-    destination = new Destination(config);
-  }
+  console.log('Source', source);
+  const supportedDestinations = ['strapi.database', 'strapi.admin-api']; // TODO: this should read from the providers folder
+  const configDestinations = config.destinations || [config.destination];
+
+  configDestinations.forEach((destination) => {
+    if (supportedDestinations.includes(destination.type)) {
+      console.log('creating destination with config', config);
+      const Destination = require(`./providers/destination/${destination.type}`);
+      destinations.push(new Destination(config));
+    } else {
+      console.error('destination type missing', config.source.type);
+      process.exit(1);
+    }
+  });
+
+  console.log('destinations', destinations);
+  // TODO: clean up all these Promise.alls, they got out of control
 
   await Promise.all([
     // after-create-* hooks are where we can handle things like "open file handle", "open db connection", etc
-    source.runHook('after-create-source', { config, destination }),
-    destination.runHook('after-create-destination', { config, source }),
+    source.runHook('after-create-source', { config, destinations }),
+    ...destinations.map((destination) =>
+      destination.runHook('after-create-destination', { config, source })
+    ),
 
     // I can't think of a specific use-case for listening to the other side being created, but it doesn't hurt
-    source.runHook('after-create-destination', { config, destination }),
-    destination.runHook('after-create-source', { config, source }),
+    ...destinations.map((destination) =>
+      destination.runHook('after-create-source', { config, source })
+    ),
+    ...destinations.map((destination) =>
+      source.runHook('after-create-destination', { config, destination })
+    ),
   ]);
 
   // load schema from source
   await source.runHook('before-load-schema', { config });
-  await destination.runHook('before-load-schema', { config });
-  const schema = await source.getSchema({ config, destination });
+  await Promise.all(
+    destinations.map((destination) => destination.runHook('before-load-schema', { config }))
+  );
+  const schema = await source.getSchema({ config, destinations });
 
-  /**
-   * TODO: real version shouldn't work like this.
-   * There needs to be some priority for which side sees the other's schema first, so that one is able to mirror the other.
-   * A flag in the config indicating that one side requires to see the opposing schema first?
-   */
   await source.runHook('after-load-schema', { config });
   // this is where a destination planning to create a schema based on what it's receiving should create that schema, for example during a transfer to file or a full restore of strapi that drops and recreates schema
-  await destination.runHook('after-load-schema', { config });
+  await Promise.all(
+    destinations.map((destination) => destination.runHook('after-load-schema', { config }))
+  );
 
-  // validate schema
+  // get schema from source
   await source.runHook('before-validate-schema', { config, source, schema });
-  await destination.runHook('before-validate-schema', { config, source, schema });
-  await destination.compareSourceSchema({ config, source, schema });
+  await Promise.all(
+    destinations.map((destination) =>
+      destination.runHook('before-validate-schema', { config, source, schema })
+    )
+  );
+  // let destinations validate schema
+  await Promise.all(
+    destinations.map((destination) => destination.compareSourceSchema({ config, source, schema }))
+  );
+
   await source.runHook('after-validate-schema', { config, source, schema });
-  await destination.runHook('after-validate-schema', { config, source, schema });
+  await Promise.all(
+    destinations.map((destination) =>
+      destination.runHook('after-validate-schema', { config, source, schema })
+    )
+  );
 
   /**
    * TODO: real version might need one or both:
@@ -94,13 +128,12 @@ module.exports = async function transfer(args) {
    * */
   // source sends data to destination via the data hook
   source.on('data', async (data) => {
-    // TODO: pipe this through the hooks here?
-    await destination.onData(data);
+    await Promise.all(destinations.map((destination) => destination.onData(data)));
   });
 
   // source notifies when it's finished sending data
   source.on('complete', async (params) => {
-    await destination.onComplete(params);
+    await Promise.all(destinations.map((destination) => destination.onComplete(params)));
     process.exit(0);
   });
 

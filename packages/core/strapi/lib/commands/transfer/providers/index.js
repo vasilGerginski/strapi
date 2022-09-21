@@ -30,6 +30,11 @@ class TransferProvider {
   // this.config = config object for this provider
 
   constructor(config, type, providerName) {
+    if (!config?.[type]?.[providerName]) {
+      console.error('missing config for', config, type, providerName);
+      throw new Error('missing config');
+    }
+
     /** @member {ProviderConfig} */
     this.config = config[type][providerName]; // TODO: clone?
     /** @member {Array} */
