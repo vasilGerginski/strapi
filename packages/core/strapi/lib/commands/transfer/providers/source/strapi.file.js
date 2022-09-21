@@ -22,12 +22,7 @@ class StrapiFileSource extends TransferSource {
   }
 
   async getSchema(/* { destination, config } */) {
-    console.log('loading schema');
-
-    // TODO: load this from file
-    return {
-      test: 'foo',
-    };
+    return this.fileContents.schema;
   }
 
   async startDataTransfer() {

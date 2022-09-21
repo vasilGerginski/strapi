@@ -5,13 +5,16 @@ module.exports = (args) => {
 
   return {
     source: {
+      // TODO: We don't need to state the type if we already have the key present below
       type: 'strapi.file',
+      // TODO: does it add anything to use the type as the config? is there a better work that still works with typings?
       'strapi.file': {
         filename: './data/backup-sample.json',
         zip: false,
         encrypt: false,
       },
     },
+    // TODO: same issues regarding config keys stated in source
     destination: {
       type: 'strapi.database',
       'strapi.database': {

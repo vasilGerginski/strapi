@@ -17,6 +17,7 @@ class StrapiDatabaseDestination extends TransferDestination {
 
   async connectToDB({ config }) {
     console.log('creating connection for', config.connection);
+    /** @member {Object} */
     this.conn = await createConnection(config.connection);
     console.log('created connection', !!this.conn);
   }

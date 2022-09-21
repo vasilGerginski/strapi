@@ -2,18 +2,42 @@
 
 const _ = require('lodash/fp');
 
+/**
+ *
+ * TODO: add real definition
+ * @typedef {() => void} TransferHookFunction
+ *
+ * TODO: add hooks here once we know what they are
+ * @typedef {{
+ * 'before-import-each': TransferHookFunction,
+ * 'after-import-each': TransferHookFunction,
+ * }} TransferHookList
+ *
+ * @typedef {{
+ * filename: string,
+ * zip: boolean,
+ * encrypt: boolean
+ * }} StrapiFileProviderOptions
+ *
+ * @typedef {{
+ * type: string,
+ * 'strapi.file': StrapiFileProviderOptions,
+ * }} ProviderConfig
+ */
+
 class TransferProvider {
   // this.hooks = array of internal hooks
   // this.config = config object for this provider
 
   constructor(config, type, providerName) {
-    // console.log('constructor', config, type, providerName);
+    /** @member {ProviderConfig} */
     this.config = config[type][providerName]; // TODO: clone?
+    /** @member {Array} */
+    this.hooks = [];
   }
 
   // register an internal hook
   on(hook, callback) {
-    if (!this.hooks) this.hooks = [];
     if (!this.hooks[hook]) {
       this.hooks[hook] = [];
     }
