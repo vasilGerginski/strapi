@@ -56,17 +56,73 @@
     { "__comment__": "if json stream doesn't support streaming this array we may have to restructure" },
     {
       "type":"content",
+      "kind": "collectionType",
       "contentType": "country",
-      "content": {
+      "attibutes": {
         "name": "Italy",
-        "id": 1
+        "id": 1,
+        "someComponent": {
+          "type": "component",
+          "name": "someComponent",
+          "attributes": {
+            "thing": "foo"
+          }
+        },
+        "someRepeatableComponent": {
+          "type": "repeatableComponent",
+          "name": "someComponent",
+          "attributes": [
+            {
+              "thing": "foo"
+            }
+          ]
+        },
+        "someDynamicZone": {
+          "type": "dynamicZone",
+          "components": [
+            {
+              "type": "component",
+              "name": "someOtherComponent",
+              "attributes": {
+                "thing": "foo"
+              }
+            }
+          ]
+        }
       }
     },
     {
-      "type":"content",
+      "action":"content",
       "contentType": "country",
-      "content": {
+      "attibutes": {
         "name": "France",
+        "id": 2
+      }
+    },
+    {
+      "action":"api::country.country.create",
+      "contentType": "country",
+      "attibutes": {
+        "name": "USA",
+        "id": 3,
+        "sisterCountry": { "type":"relation", "contentType":"country", "id": 2}
+      }
+    },
+    { "__comment__": "Source can select relations after content type has finished, and then add them with updates:" },
+    {
+      "action": "update",
+      "contentType":"country",
+      "id": 2,
+      "attributes": {
+        "sisterCountry": { "type":"relation", "contentType":"country", "id": 3}
+      }
+    },
+    {
+      "action":"content",
+      "contentType": "city",
+      "attibutes": {
+        "name": "Paris",
+        "country": { "type":"relation", "contentType":"country", "id": 2},
         "id": 2
       }
     }
