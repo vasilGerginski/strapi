@@ -34,7 +34,7 @@ class StrapiDatabaseDestination extends TransferDestination {
    * @param {StrapiSchema} params.schema
    *
    */
-  compareSourceSchema(params) {
+  async compareSourceSchema(params) {
     super.compareSourceSchema(params);
 
     const { schema, config } = params;

@@ -1,6 +1,5 @@
 'use strict';
 
-const chalk = require('chalk');
 const path = require('path');
 const fs = require('fs');
 
@@ -32,10 +31,7 @@ function loadTransferConfig(filename, options) {
  * @param {*} args
  */
 module.exports = async function transfer(args) {
-  console.log(chalk.yellow('args'), args);
-
   const config = await loadTransferConfig(args.C, args); // TODO: allow separate source/destination configs instead of only one file with both
-  console.log('config', JSON.stringify(config, null, 2));
 
   // Excuse the ugliness here, just a PoC :)
   // In the real version, everything in the providers folder should be moved somewhere like @strapi/transfer to be usable in strapi instead of only the CLI
@@ -45,7 +41,7 @@ module.exports = async function transfer(args) {
 
   const supportedSources = ['strapi.file']; // TODO: this should read from the providers folder
   if (supportedSources.includes(config.source.type)) {
-    console.log('loading source', config.source.type);
+    console.log('creating source with config', config);
     const Source = require(`./providers/source/${config.source.type}`);
     source = new Source(config);
   } else {
@@ -53,7 +49,6 @@ module.exports = async function transfer(args) {
     process.exit(1);
   }
 
-  console.log('Source', source);
   const supportedDestinations = ['strapi.database', 'strapi.admin-api']; // TODO: this should read from the providers folder
   const configDestinations = config.destinations || [config.destination];
 
@@ -68,9 +63,7 @@ module.exports = async function transfer(args) {
     }
   });
 
-  console.log('destinations', destinations);
-  // TODO: clean up all these Promise.alls, they got out of control
-
+  // TODO: clean up all these Promise.alls, they got out of control and the ordering of calls should be improved
   await Promise.all([
     // after-create-* hooks are where we can handle things like "open file handle", "open db connection", etc
     source.runHook('after-create-source', { config, destinations }),
@@ -92,7 +85,7 @@ module.exports = async function transfer(args) {
   await Promise.all(
     destinations.map((destination) => destination.runHook('before-load-schema', { config }))
   );
-  const schema = await source.getSchema({ config, destinations });
+  const sourceSchema = await source.getSchema({ config, destinations });
 
   await source.runHook('after-load-schema', { config });
   // this is where a destination planning to create a schema based on what it's receiving should create that schema, for example during a transfer to file or a full restore of strapi that drops and recreates schema
@@ -101,21 +94,23 @@ module.exports = async function transfer(args) {
   );
 
   // get schema from source
-  await source.runHook('before-validate-schema', { config, source, schema });
+  await source.runHook('before-validate-schema', { config, source, schema: sourceSchema });
   await Promise.all(
     destinations.map((destination) =>
-      destination.runHook('before-validate-schema', { config, source, schema })
+      destination.runHook('before-validate-schema', { config, source, schema: sourceSchema })
     )
   );
   // let destinations validate schema
   await Promise.all(
-    destinations.map((destination) => destination.compareSourceSchema({ config, source, schema }))
+    destinations.map((destination) =>
+      destination.compareSourceSchema({ config, source, schema: sourceSchema })
+    )
   );
 
-  await source.runHook('after-validate-schema', { config, source, schema });
+  await source.runHook('after-validate-schema', { config, source, schema: sourceSchema });
   await Promise.all(
     destinations.map((destination) =>
-      destination.runHook('after-validate-schema', { config, source, schema })
+      destination.runHook('after-validate-schema', { config, source, schema: sourceSchema })
     )
   );
 
