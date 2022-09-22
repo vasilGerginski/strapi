@@ -1,7 +1,15 @@
 {
   "metadata": {
-    "__comment__": "This was actually a manually created file. And for now metadata isn't used anyway",
-    "provider": "strapi.file"
+    "sourceProvider": "manually created",
+    "__comment__": "Strapi data such as version and plugins is optional but will be required for the strict comparison we're using for restore",
+    "strapi": {
+      "version": "4.0.0",
+      "plugins": {
+        "users-permissions": {
+          "version": "4.0.0"
+         }
+      }
+    }
   },
   "schema": {
     "__comment__": "This is the schema that will be compared with the destination",
