@@ -1,0 +1,421 @@
+{
+  "__comment__": "Metadata will store data that is not part of the content schema but might be relevant in the transfer",
+  "metadata": {
+    "sourceProvider": "file.strapi",
+    "strapi": {
+      "__comment__": "Strapi data such as version and plugins is optional but will be required for the strict comparison we're using for restore",
+      "version": "4.4.0",
+      "plugins": {
+        "users-permissions": {
+          "version": "4.4.0"
+        }
+      }
+    },
+    "schema": [
+      {
+        "__comment__": "Schema holds all content types, single types, components, including from plugins. From strapi.contentTypes -> formatContentType"
+      },
+      {
+        "uid": "api::country.country",
+        "apiID": "country",
+        "schema": {
+          "displayName": "Country",
+          "singularName": "country",
+          "pluralName": "countries",
+          "description": "",
+          "draftAndPublish": false,
+          "pluginOptions": {
+            "i18n": {
+              "localized": true
+            }
+          },
+          "kind": "collectionType",
+          "collectionName": "countries",
+          "attributes": {
+            "name": {
+              "type": "string",
+              "required": true,
+              "minLength": 3,
+              "pluginOptions": {
+                "i18n": {
+                  "localized": true
+                }
+              }
+            },
+            "code": {
+              "type": "string",
+              "maxLength": 3,
+              "unique": true,
+              "minLength": 2,
+              "pluginOptions": {
+                "i18n": {
+                  "localized": true
+                }
+              }
+            }
+          },
+          "visible": true,
+          "restrictRelationsTo": null
+        }
+      },
+      {
+        "uid": "api::homepage.homepage",
+        "apiID": "homepage",
+        "schema": {
+          "displayName": "Homepage",
+          "singularName": "homepage",
+          "pluralName": "homepages",
+          "description": "",
+          "draftAndPublish": true,
+          "pluginOptions": {
+            "i18n": {
+              "localized": true
+            }
+          },
+          "kind": "singleType",
+          "collectionName": "homepages",
+          "attributes": {
+            "title": {
+              "type": "string",
+              "required": true,
+              "pluginOptions": {
+                "i18n": {
+                  "localized": true
+                }
+              }
+            },
+            "slug": {
+              "type": "uid",
+              "targetField": "title",
+              "required": true,
+              "pluginOptions": {
+                "i18n": {
+                  "localized": true
+                }
+              }
+            },
+            "single": {
+              "type": "media",
+              "multiple": false,
+              "required": false,
+              "allowedTypes": [
+                "images",
+                "files",
+                "videos"
+              ]
+            },
+            "multiple": {
+              "type": "media",
+              "multiple": true,
+              "required": false,
+              "allowedTypes": [
+                "images",
+                "videos"
+              ]
+            }
+          },
+          "visible": true,
+          "restrictRelationsTo": null
+        }
+      },
+      {
+        "uid": "api::kitchensink.kitchensink",
+        "apiID": "kitchensink",
+        "schema": {
+          "displayName": "Kitchen Sink",
+          "singularName": "kitchensink",
+          "pluralName": "kitchensinks",
+          "description": "",
+          "draftAndPublish": true,
+          "pluginOptions": {},
+          "kind": "collectionType",
+          "collectionName": "kitchensinks",
+          "attributes": {
+            "short_text": {
+              "type": "string"
+            },
+            "long_text": {
+              "type": "text"
+            },
+            "rich_text": {
+              "type": "richtext"
+            },
+            "integer": {
+              "type": "integer"
+            },
+            "biginteger": {
+              "type": "biginteger"
+            },
+            "decimal": {
+              "type": "decimal"
+            },
+            "float": {
+              "type": "float"
+            },
+            "date": {
+              "type": "date"
+            },
+            "datetime": {
+              "type": "datetime"
+            },
+            "time": {
+              "type": "time"
+            },
+            "timestamp": {
+              "type": "timestamp"
+            },
+            "boolean": {
+              "type": "boolean"
+            },
+            "email": {
+              "type": "email"
+            },
+            "password": {
+              "type": "password"
+            },
+            "enumeration": {
+              "type": "enumeration",
+              "enum": [
+                "A",
+                "B",
+                "C",
+                "D",
+                "E"
+              ]
+            },
+            "single_media": {
+              "type": "media",
+              "multiple": false,
+              "required": false,
+              "allowedTypes": [
+                "images",
+                "files",
+                "videos"
+              ]
+            },
+            "multiple_media": {
+              "type": "media",
+              "multiple": true,
+              "required": false,
+              "allowedTypes": [
+                "images",
+                "files",
+                "videos"
+              ]
+            },
+            "json": {
+              "type": "json"
+            },
+            "single_compo": {
+              "type": "component",
+              "repeatable": false,
+              "component": "basic.simple"
+            },
+            "repeatable_compo": {
+              "type": "component",
+              "repeatable": true,
+              "component": "basic.simple"
+            },
+            "dynamiczone": {
+              "type": "dynamiczone",
+              "components": [
+                "basic.simple"
+              ]
+            },
+            "one_way_tag": {
+              "type": "relation",
+              "relation": "oneToOne",
+              "target": "api::tag.tag",
+              "targetAttribute": null,
+              "private": false
+            },
+            "one_to_one_tag": {
+              "type": "relation",
+              "relation": "oneToOne",
+              "target": "api::tag.tag",
+              "private": true,
+              "inversedBy": "one_to_one_kitchensink",
+              "targetAttribute": "one_to_one_kitchensink"
+            },
+            "one_to_many_tags": {
+              "type": "relation",
+              "relation": "oneToMany",
+              "target": "api::tag.tag",
+              "mappedBy": "many_to_one_kitchensink",
+              "targetAttribute": "many_to_one_kitchensink",
+              "private": false
+            },
+            "many_to_one_tag": {
+              "type": "relation",
+              "relation": "manyToOne",
+              "target": "api::tag.tag",
+              "inversedBy": "one_to_many_kitchensinks",
+              "targetAttribute": "one_to_many_kitchensinks",
+              "private": false
+            },
+            "many_to_many_tags": {
+              "type": "relation",
+              "relation": "manyToMany",
+              "target": "api::tag.tag",
+              "inversedBy": "many_to_many_kitchensinks",
+              "targetAttribute": "many_to_many_kitchensinks",
+              "private": false
+            },
+            "many_way_tags": {
+              "type": "relation",
+              "relation": "oneToMany",
+              "target": "api::tag.tag",
+              "targetAttribute": null,
+              "private": false
+            },
+            "morph_to_one": {
+              "type": "relation",
+              "relation": "morphToOne",
+              "targetAttribute": null,
+              "private": false
+            },
+            "morph_to_many": {
+              "type": "relation",
+              "relation": "morphToMany",
+              "targetAttribute": null,
+              "private": false
+            }
+          },
+          "visible": true,
+          "restrictRelationsTo": null
+        }
+      }
+    ]
+  },
+  "content": [
+    {
+      "__comment__": "This is where the data will be stored. It will hold the content but not the relations. That means it could (in theory) run in parallel"
+    },
+    {
+      "__comment__": "The elements in this array will be passed to the destination provider as they are available. The plan for v1 is one at a time, but it would be fairly simple to allow batches to be sent, and the destination could choose to run a bulk query (if available) or split it up. And vice versa, destination could queue up batches even if it only receives one at a time from source. It's up to destination provider how it can handle the inserts in the most performant way"
+    },
+    {
+      "__comment__": "For v1, we are only providing 'backup and restore' capability, so we are requiring the same id between source and destination, and there will be an error if the id cannot be created at the destination (default will be to require destination database to be empty of content, but a flag will be available to delete all destination content before beginning the transfer). However, we plan for v2 to allow content to use only a temporary 'transfer id' allowing it to be used in relations during the transfer, but allowing its actual id to be generated by the destination. We would maintain a temporary map (ideally a temp table in the destination db) to allow that."
+    },
+    {
+      "type": "content",
+      "kind": "collectionType",
+      "contentType": "country",
+      "attibutes": {
+        "locale": "fr-FR",
+        "name": "Italy",
+        "id": 1,
+        "someComponent": {
+          "type": "component",
+          "name": "someComponent",
+          "attributes": {
+            "thing": "foo"
+          }
+        },
+        "someRepeatableComponent": {
+          "type": "repeatableComponent",
+          "name": "someComponent",
+          "attributes": [
+            {
+              "thing": "foo"
+            }
+          ]
+        },
+        "someDynamicZone": {
+          "type": "dynamicZone",
+          "components": [
+            {
+              "type": "component",
+              "name": "someOtherComponent",
+              "attributes": {
+                "thing": "foo"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "action": "createContentItem",
+      "contentType": "country",
+      "attibutes": {
+        "name": "France",
+        "id": 2,
+        "sisterCountry": {
+          "type": "relation",
+          "contentType": "country",
+          "id": 3
+        }
+      }
+    },
+    {
+      "action": "createContentItem",
+      "contentType": "country",
+      "attibutes": {
+        "name": "USA",
+        "id": 3,
+        "sisterCountry": {
+          "type": "relation",
+          "contentType": "country",
+          "id": 2
+        }
+      }
+    },
+    {
+      "__comment__": "Source can select relations after content type has finished, and then add them with updates:"
+    },
+    {
+      "type": "relation",
+      "contentType": "country",
+      "id": 2,
+      "attributes": {
+        "sisterCountry": {
+          "type": "relation",
+          "contentType": "country",
+          "id": 3
+        }
+      }
+    },
+    {
+      "action": "content",
+      "contentType": "city",
+      "attibutes": {
+        "name": "Paris",
+        "country": {
+          "type": "relation",
+          "contentType": "country",
+          "id": 2
+        },
+        "id": 2
+      }
+    },
+    {
+      "action": "api::page.page.create",
+      "attibutes": {
+        "title": "Page title",
+        "id": 2
+      }
+    },
+    {
+      "action": "api::page.page.createLocalization",
+      "attibutes": {
+        "locale": "fr-FR",
+        "attributes": {
+          "title": "Page title in french",
+          "id": 3
+        }
+      }
+    }
+  ],
+  "relations": [
+    {
+      "__comment__": "This is where all relations will be stored and will be essentially a dump of every links table. It will be sent after content transfer has completed. In theory this should also be able to run in parallel, since all content items already exist, and we do not care about the id column of links tables"
+    },
+    {
+      "__comment__": "Note: there wasn't time to detail this with the actual format "
+    },
+    {
+      "type": "oneToOne"
+    }
+  ]
+}

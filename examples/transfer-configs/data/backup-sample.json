@@ -3,16 +3,17 @@
     "sourceProvider": "manually created",
     "__comment__": "Strapi data such as version and plugins is optional but will be required for the strict comparison we're using for restore",
     "strapi": {
-      "version": "4.0.0",
+      "version": "4.3.8",
+      "uid": "getstarted",
       "plugins": {
         "users-permissions": {
-          "version": "4.0.0"
+          "version": "4.3.8"
          }
       }
     }
   },
   "schema": {
-    "__comment__": "This is the schema that will be compared with the destination",
+    "__comment__": "This is the schema that will be compared with the destination. We only care about the content type to match fields, we do not need to store things like controllers, routes, etc, because those are code and not relevant",
     "contentTypes": [
       {
         "kind": "collectionType",
@@ -67,6 +68,7 @@
       "kind": "collectionType",
       "contentType": "country",
       "attibutes": {
+        "locale": "fr-FR",
         "name": "Italy",
         "id": 1,
         "someComponent": {
@@ -100,15 +102,16 @@
       }
     },
     {
-      "action":"content",
+      "action":"createContentItem",
       "contentType": "country",
       "attibutes": {
         "name": "France",
-        "id": 2
+        "id": 2,
+        "sisterCountry": { "type":"relation", "contentType":"country", "id": 3}
       }
     },
     {
-      "action":"api::country.country.create",
+      "action":"createContentItem",
       "contentType": "country",
       "attibutes": {
         "name": "USA",
@@ -118,7 +121,7 @@
     },
     { "__comment__": "Source can select relations after content type has finished, and then add them with updates:" },
     {
-      "action": "update",
+      "type": "relation",
       "contentType":"country",
       "id": 2,
       "attributes": {
