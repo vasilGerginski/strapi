@@ -5,6 +5,8 @@ const TransferDestination = require('./transfer-destination');
 
 const providerName = 'strapi.admin-api';
 
+// ABANDONED: we're not going this route for now and instead focusing on database transfers
+
 class StrapiAdminApiDestination extends TransferDestination {
   // this.config - this provider's configuration
 

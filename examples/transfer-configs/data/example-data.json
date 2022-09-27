@@ -1,6 +1,7 @@
 {
-  "__comment__": "Metadata will store data that is not part of the content schema but might be relevant in the transfer",
+  "__comment__": "This file is a visual representation of the different steps in the transfer process. If stored as a file, they may be stored across separate files",
   "metadata": {
+    "__comment__": "Metadata will store data that is not part of the content schema but might be relevant in the transfer",
     "sourceProvider": "file.strapi",
     "strapi": {
       "__comment__": "Strapi data such as version and plugins is optional but will be required for the strict comparison we're using for restore",
@@ -332,77 +333,6 @@
               }
             }
           ]
-        }
-      }
-    },
-    {
-      "action": "createContentItem",
-      "contentType": "country",
-      "attibutes": {
-        "name": "France",
-        "id": 2,
-        "sisterCountry": {
-          "type": "relation",
-          "contentType": "country",
-          "id": 3
-        }
-      }
-    },
-    {
-      "action": "createContentItem",
-      "contentType": "country",
-      "attibutes": {
-        "name": "USA",
-        "id": 3,
-        "sisterCountry": {
-          "type": "relation",
-          "contentType": "country",
-          "id": 2
-        }
-      }
-    },
-    {
-      "__comment__": "Source can select relations after content type has finished, and then add them with updates:"
-    },
-    {
-      "type": "relation",
-      "contentType": "country",
-      "id": 2,
-      "attributes": {
-        "sisterCountry": {
-          "type": "relation",
-          "contentType": "country",
-          "id": 3
-        }
-      }
-    },
-    {
-      "action": "content",
-      "contentType": "city",
-      "attibutes": {
-        "name": "Paris",
-        "country": {
-          "type": "relation",
-          "contentType": "country",
-          "id": 2
-        },
-        "id": 2
-      }
-    },
-    {
-      "action": "api::page.page.create",
-      "attibutes": {
-        "title": "Page title",
-        "id": 2
-      }
-    },
-    {
-      "action": "api::page.page.createLocalization",
-      "attibutes": {
-        "locale": "fr-FR",
-        "attributes": {
-          "title": "Page title in french",
-          "id": 3
         }
       }
     }
