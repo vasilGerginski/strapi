@@ -16,11 +16,11 @@
     "create-strapi-app": "./index.js"
   },
   "dependencies": {
-    "chalk": "4.1.1",
+    "chalk": "5.0.1",
     "commander": "6.1.0",
     "inquirer": "8.1.0",
     "js-yaml": "4.1.0",
-    "node-fetch": "^2.6.1",
+    "node-fetch": "^2.6.7",
     "strapi-generate-new": "3.6.10"
   },
   "scripts": {
@@ -39,7 +39,7 @@
     "url": "https://github.com/strapi/strapi/issues"
   },
   "engines": {
-    "node": ">=10.16.0 <=14.x.x",
+    "node": ">=10.16.0 <=16.x.x",
     "npm": ">=6.0.0"
   },
   "gitHead": "231263a3535658bab1e9492c6aaaed8692d62a53"

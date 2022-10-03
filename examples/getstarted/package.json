@@ -16,7 +16,7 @@
     "lodash": "4.17.21",
     "mysql": "2.18.1",
     "pg": "8.6.0",
-    "sqlite3": "5.0.0",
+    "sqlite3": "^5.1.2",
     "strapi": "3.6.10",
     "strapi-admin": "3.6.10",
     "strapi-connector-bookshelf": "3.6.10",
@@ -39,7 +39,7 @@
     "uuid": "getstarted"
   },
   "engines": {
-    "node": ">=10.16.0 <=14.x.x",
+    "node": ">=10.16.0 <=16.x.x",
     "npm": ">=6.0.0"
   },
   "license": "SEE LICENSE IN LICENSE"
